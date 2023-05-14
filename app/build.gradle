@@ -1,0 +1,123 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.agusw.testcalculatorscan'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.agusw.testcalculatorscan"
+        minSdk 30
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    flavorDimensions += "feature"
+    flavorDimensions += "theme"
+    productFlavors {
+        create("fileSystem") {
+            dimension = "feature"
+            buildConfigField "String", "INPUT_SOURCE", "\"FILE_SYSTEM\""
+        }
+        create("camera") {
+            dimension = "feature"
+            buildConfigField "String", "INPUT_SOURCE", "\"CAMERA\""
+        }
+        create("red") {
+            dimension = "theme"
+            manifestPlaceholders = [ appTheme : "@style/Theme.TestCalculatorScan.Red" ]
+        }
+        create("green") {
+            dimension = "theme"
+            manifestPlaceholders = [ appTheme : "@style/Theme.TestCalculatorScan.Green" ]
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.exifinterface:exifinterface:1.3.6'
+    implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha06'
+
+    def activity_version = "1.7.1"
+    implementation "androidx.activity:activity-ktx:$activity_version"
+
+    // coroutines dependencies
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+
+    // DI
+    def hilt_version = "2.44"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // viewmodel lib
+    def lifecycle_version = "2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // material themes lib
+    implementation 'com.google.android.material:material:1.9.0'
+
+    // database dependencies
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // logger
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
+    // json parse lib
+    def moshi_version = '1.14.0'
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    // widget dependencies
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.3.0"
+
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+
+    // text recognition lib
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
